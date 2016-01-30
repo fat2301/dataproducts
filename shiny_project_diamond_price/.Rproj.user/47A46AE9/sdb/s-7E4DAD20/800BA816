@@ -1,0 +1,17 @@
+{
+    "contents" : "\n# This is the server logic for a Shiny web application.\n# You can find out more about building applications with Shiny here:\n#\n# http://shiny.rstudio.com\n#\n\nlibrary(shiny)\nlibrary(ggplot2)\n\ndiamond_dataset <- diamonds\nfit <- train(price~carat+as.factor(cut)+as.factor(color)+as.factor(clarity), method=\"glm\", data=diamond_dataset)\n\nshinyServer(function(input, output) {\n\n\n  output$carattext <- renderText({ \n    c(\"Your chosen size is \", input$carat, \" carat.\")\n  })\n\n  output$colortext <- renderText({ \n    c(\"Color represents absence of color, with D as the best. \", input$color, \" means it is \", switch (input$color , \n                                                              D= \"Colorless- whitest color\",\n                                                       E= \"Colorless- 2nd whitest\",\n                                                       F= \"Colorless- 3rd whitest\",\n                                                       G= \"Near Colorless\",\n                                                       H= \"Near Colorless\",\n                                                       I= \"Near Colorless\",\n                                                       J= \"Near Colorless - almost faint\") , \".\")\n      })\n  \n  output$cuttext <- renderText({\n    c(\"Cut is a description of how well it interacts with light: \",input$cut,\".\")\n  })\n  \n  output$claritytext <- renderText({ \n    c(\"Clarity refers to absence of inclusions and blemishes. \", input$clarity, \" means \", \n            switch (input$clarity , \n                                                       I1= \"Included\",\n                                                       SI2= \"Slightly Included\",\n                                                       SI1= \"Slightly Included\",\n                                                       VS2= \"Very Slightly Included\",\n                                                       VS1= \"Very Slightly Included\",\n                                                       VVS2= \"Very Very Slightly Included\",\n                                                       VVS1= \"Very very Slightly Included\",\n                                                       IF = \"Internally Flawless\") , \".\")\n  })\n  \n  \n    output$price <- renderText({ \n    predicted <- max(predict(fit, data.frame(carat=input$carat, cut=input$cut, \n                                         color=input$color, clarity=input$clarity)\n                         ),325)\n  c(\"Price estimate is \",predicted)\n  })\n  \n  \n    output$comparisonPlot <- renderPlot({\n\n    \n    hist(diamond_dataset$carat, breaks = 20, xlim= c(0,2.5), col = 'darkgray', border = 'white',\n         main = \"How common is your diamond size?\",\n         xlab = \"Carat Size\", ylab = \"Number of diamonds for that size\")\n    abline(v=input$carat,col=\"red\")\n  })\n\n    \n    \n})\n\n",
+    "created" : 1454161250179.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2964929296",
+    "id" : "800BA816",
+    "lastKnownWriteTime" : 1454175610,
+    "path" : "~/R/shiny_project_diamond/shiny_project_diamond_price/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
